@@ -118,7 +118,7 @@ namespace Azure.Iot.Hub.Service
         /// </code>
         public virtual Task<Response<DeviceIdentity>> GetIdentityAsync(string deviceId, CancellationToken cancellationToken = default)
         {
-            return _devicesRestClient.GetDeviceAsync(deviceId, cancellationToken);
+            return _devicesRestClient.GetIdentityAsync(deviceId, cancellationToken);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Azure.Iot.Hub.Service
         /// <returns>The retrieved device identity and the http response <see cref="Response{T}"/>.</returns>
         public virtual Response<DeviceIdentity> GetIdentity(string deviceId, CancellationToken cancellationToken = default)
         {
-            return _devicesRestClient.GetDevice(deviceId, cancellationToken);
+            return _devicesRestClient.GetIdentity(deviceId, cancellationToken);
         }
 
         /// <summary>

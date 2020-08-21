@@ -135,7 +135,7 @@ namespace Azure.Iot.Hub.Service
             return message;
         }
 
-        /// <summary> Creates, updates, or deletes the identities of multiple devices from the IoT Hub identity registry. A device identity can be specified only once in the list. Different operations (create, update, delete) on different devices are allowed. A maximum of 100 devices can be specified per invocation. For large scale operations, use the import feature using blob storage(https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities). </summary>
+        /// <summary> Creates, updates, or deletes the identities of multiple devices from the IoT Hub identity registry. A device identity can be specified only once in the list. Different operations (create, update, delete) on different devices are allowed. A maximum of 100 devices can be specified per invocation. For large scale operations, use the import feature using blob storage (https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities). </summary>
         /// <param name="devices"> The registry operations to perform. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="devices"/> is null. </exception>
@@ -163,7 +163,7 @@ namespace Azure.Iot.Hub.Service
             }
         }
 
-        /// <summary> Creates, updates, or deletes the identities of multiple devices from the IoT Hub identity registry. A device identity can be specified only once in the list. Different operations (create, update, delete) on different devices are allowed. A maximum of 100 devices can be specified per invocation. For large scale operations, use the import feature using blob storage(https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities). </summary>
+        /// <summary> Creates, updates, or deletes the identities of multiple devices from the IoT Hub identity registry. A device identity can be specified only once in the list. Different operations (create, update, delete) on different devices are allowed. A maximum of 100 devices can be specified per invocation. For large scale operations, use the import feature using blob storage (https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities). </summary>
         /// <param name="devices"> The registry operations to perform. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="devices"/> is null. </exception>
@@ -191,7 +191,7 @@ namespace Azure.Iot.Hub.Service
             }
         }
 
-        internal HttpMessage CreateGetDeviceRequest(string id)
+        internal HttpMessage CreateGetIdentityRequest(string id)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -209,14 +209,14 @@ namespace Azure.Iot.Hub.Service
         /// <param name="id"> The unique identifier of the device. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> is null. </exception>
-        public async Task<Response<DeviceIdentity>> GetDeviceAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<Response<DeviceIdentity>> GetIdentityAsync(string id, CancellationToken cancellationToken = default)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using var message = CreateGetDeviceRequest(id);
+            using var message = CreateGetIdentityRequest(id);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -236,14 +236,14 @@ namespace Azure.Iot.Hub.Service
         /// <param name="id"> The unique identifier of the device. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> is null. </exception>
-        public Response<DeviceIdentity> GetDevice(string id, CancellationToken cancellationToken = default)
+        public Response<DeviceIdentity> GetIdentity(string id, CancellationToken cancellationToken = default)
         {
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
-            using var message = CreateGetDeviceRequest(id);
+            using var message = CreateGetIdentityRequest(id);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

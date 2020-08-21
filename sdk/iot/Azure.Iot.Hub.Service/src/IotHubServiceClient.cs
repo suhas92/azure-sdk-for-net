@@ -24,22 +24,22 @@ namespace Azure.Iot.Hub.Service
         private readonly JobsRestClient _jobsRestClient;
 
         /// <summary>
-        /// place holder for Devices.
+        /// Client to perform operations on devices.
         /// </summary>
         public virtual DevicesClient Devices { get; private set; }
 
         /// <summary>
-        /// place holder for Modules.
+        /// Client to perform operations on modules.
         /// </summary>
         public virtual ModulesClient Modules { get; private set; }
 
         /// <summary>
-        /// place holder for Statistics.
+        /// Client to get statistics on devices and modules.
         /// </summary>
         public virtual StatisticsClient Statistics { get; private set; }
 
         /// <summary>
-        /// place holder for Configurations.
+        /// Client to set configurations on devices and modules.
         /// </summary>
         public virtual ConfigurationsClient Configurations { get; private set; }
 
@@ -54,10 +54,13 @@ namespace Azure.Iot.Hub.Service
         public virtual FilesClient Files { get; private set; }
 
         /// <summary>
-        /// place holder for Jobs
+        /// Client to create jobs - Import, export and scheduled jobs.
         /// </summary>
         public virtual JobsClient Jobs { get; private set; }
 
+        /// <summary>
+        /// Client to query device and module twins
+        /// </summary>
         public virtual QueryClient Query { get; private set; }
 
         /// <summary>
