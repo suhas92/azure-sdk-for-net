@@ -234,30 +234,30 @@ stages:
                           # we override the regular script path because we have cloned the build tools repo as a separate artifact.
                           ScriptPath: 'eng/common/scripts/copy-docs-to-blobstorage.ps1'
 
-          - ${{if ne(artifact.options.skipUpdatePackageVersion, 'true')}}:
-            - deployment: UpdatePackageVersion
-              displayName: "Update Package Version"
-              condition: and(succeeded(), ne(variables['Skip.UpdatePackageVersion'], 'true'))
-              environment: github
-              dependsOn: PublishPackage
+          # - ${{if ne(artifact.options.skipUpdatePackageVersion, 'true')}}:
+          #   - deployment: UpdatePackageVersion
+          #     displayName: "Update Package Version"
+          #     condition: and(succeeded(), ne(variables['Skip.UpdatePackageVersion'], 'true'))
+          #     environment: github
+          #     dependsOn: PublishPackage
 
-              pool:
-                vmImage: windows-2019
+          #     pool:
+          #       vmImage: windows-2019
 
-              strategy:
-                runOnce:
-                  deploy:
-                    steps:
-                      - checkout: self
-                      - pwsh: |
-                          eng/scripts/Update-PkgVersion.ps1 -ServiceDirectory '${{parameters.ServiceDirectory}}' -PackageName '${{artifact.name}}' -PackageDirName '${{artifact.directoryName}}'
-                        displayName: Increment package version
-                      - template: /eng/common/pipelines/templates/steps/create-pull-request.yml
-                        parameters:
-                          RepoName: azure-sdk-for-net
-                          PRBranchName: increment-package-version-${{ parameters.ServiceDirectory }}-$(Build.BuildId)
-                          CommitMsg: "Increment package version after release of ${{ artifact.name }}"
-                          PRTitle: "Increment version for ${{ parameters.ServiceDirectory }} releases"
+          #     strategy:
+          #       runOnce:
+          #         deploy:
+          #           steps:
+          #             - checkout: self
+          #             - pwsh: |
+          #                 eng/scripts/Update-PkgVersion.ps1 -ServiceDirectory '${{parameters.ServiceDirectory}}' -PackageName '${{artifact.name}}' -PackageDirName '${{artifact.directoryName}}'
+          #               displayName: Increment package version
+          #             - template: /eng/common/pipelines/templates/steps/create-pull-request.yml
+          #               parameters:
+          #                 RepoName: azure-sdk-for-net
+          #                 PRBranchName: increment-package-version-${{ parameters.ServiceDirectory }}-$(Build.BuildId)
+          #                 CommitMsg: "Increment package version after release of ${{ artifact.name }}"
+          #                 PRTitle: "Increment version for ${{ parameters.ServiceDirectory }} releases"
 
   - stage: Integration
     dependsOn: Signing
