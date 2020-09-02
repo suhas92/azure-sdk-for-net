@@ -412,9 +412,9 @@ function RetrieveReleaseTag($pkgRepository, $artifactLocation, $continueOnError 
   }
 }
 function RetrivePackages($pkgRepository, $artifactLocation) {
-  Write-Host "$pkgRepository"
   $ParsePkgInfoFn = ""
   $packagePattern = ""
+  $pkgRepository = $pkgRepository.Trim()
   switch ($pkgRepository) {
     "Maven" {
       $ParsePkgInfoFn = "ParseMavenPackage"
