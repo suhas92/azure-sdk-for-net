@@ -391,9 +391,7 @@ function GetExistingTags($apiUrl) {
 function RetrieveReleaseTag($pkgRepository, $artifactLocation, $continueOnError = $true) {
   try {
     $pkgs, $ParsePkgInfoFn = RetrivePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation
-    Write-Host "This is the pkgs: $pkgs"
-    Write-Host "This is the pack func: $ParsePkgInfoFn"
-    if (!pkgs -or !$pkgs[0]) {
+    if (!$pkgs -or !$pkgs[0]) {
       return ""
     }
     $parsedPackage = &$ParsePkgInfoFn -pkg $pkgs[0]
@@ -457,8 +455,7 @@ function RetrivePackages($pkgRepository, $artifactLocation) {
 function VerifyPackages($pkgRepository, $artifactLocation, $workingDirectory, $apiUrl, $releaseSha,  $continueOnError = $false) {
   $pkgList = [array]@()
   $pkgs, $ParsePkgInfoFn = RetrivePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation
-  Write-Host "This is the pkgs: $pkgs"
-  Write-Host "This is the pack func: $ParsePkgInfoFn"
+
   foreach ($pkg in $pkgs) {
     try {
       $parsedPackage = &$ParsePkgInfoFn -pkg $pkg -workingDirectory $workingDirectory
