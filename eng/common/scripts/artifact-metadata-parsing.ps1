@@ -69,7 +69,7 @@ function ParseMavenPackage($pkg, $workingDirectory) {
     PackageId      = $pkgId
     GroupId        = $groupId
     PackageVersion = $pkgVersion
-    ReleaseTag     = "$pkgId_$pkgVersion"
+    ReleaseTag     = "$($pkgId)_$($pkgVersion)"
     Deployable     = $forceCreate -or !(IsMavenPackageVersionPublished -pkgId $pkgId -pkgVersion $pkgVersion -groupId $groupId.Replace(".", "/"))
     ReleaseNotes   = $releaseNotes
     ReadmeContent  = $readmeContent
@@ -101,8 +101,7 @@ function IsMavenPackageVersionPublished($pkgId, $pkgVersion, $groupId) {
 
     Write-Host "VersionCheck to maven for packageId $pkgId failed with statuscode $statusCode"
     Write-Host $statusDescription
-    #exit(1)
-    return
+    exit(1)
   }
 }
 
@@ -152,7 +151,7 @@ function ParseNPMPackage($pkg, $workingDirectory) {
   $resultObj = New-Object PSObject -Property @{
     PackageId      = $pkgId
     PackageVersion = $pkgVersion
-    ReleaseTag     = "$pkgId_$pkgVersion"
+    ReleaseTag     = "$($pkgId)_$($pkgVersion)"
     Deployable     = $forceCreate -or !(IsNPMPackageVersionPublished -pkgId $pkgId -pkgVersion $pkgVersion)
     ReleaseNotes   = $releaseNotes
     ReadmeContent  = $readmeContent
@@ -211,7 +210,7 @@ function ParseNugetPackage($pkg, $workingDirectory) {
   return New-Object PSObject -Property @{
     PackageId      = $pkgId
     PackageVersion = $pkgVersion
-    ReleaseTag     = "$pkgId_$pkgVersion"
+    ReleaseTag     = "$($pkgId)_$($pkgVersion)"
     Deployable     = $forceCreate -or !(IsNugetPackageVersionPublished -pkgId $pkgId -pkgVersion $pkgVersion)
     ReleaseNotes   = $releaseNotes
     ReadmeContent  = $readmeContent
@@ -276,7 +275,7 @@ function ParsePyPIPackage($pkg, $workingDirectory) {
   return New-Object PSObject -Property @{
     PackageId      = $pkgId
     PackageVersion = $pkgVersion
-    ReleaseTag     = "$pkgId_$pkgVersion"
+    ReleaseTag     = "$($pkgId)_$($pkgVersion)"
     Deployable     = $forceCreate -or !(IsPythonPackageVersionPublished -pkgId $pkgId -pkgVersion $pkgVersion)
     ReleaseNotes   = $releaseNotes
     ReadmeContent  = $readmeContent
@@ -337,7 +336,7 @@ function ParseCppArtifact($pkg, $workingDirectory) {
   return New-Object PSObject -Property @{
     PackageId      = $pkgName
     PackageVersion = $pkgVersion
-    ReleaseTag     = "$pkgId_$pkgVersion"
+    ReleaseTag     = "$($pkgId)_$($pkgVersion)"
     # Artifact info is always considered deployable for now becasue it is not
     # deployed anywhere. Dealing with duplicate tags happens downstream in
     # CheckArtifactShaAgainstTagsList
@@ -395,16 +394,16 @@ function GetExistingTags($apiUrl) {
 }
 
 # Retrieve release tag for artiface package. If multiple packages, then output the first one.
-function RetrieveReleaseTag($pkgRepository, $artifactLocation, $continueOnError = $true) {
+function RetrieveReleaseTag($pkgRepository, $artifactLocation, $pkgName, $continueOnError = $true) {
   if (!$artifactLocation) {
     return ""
   }
   try {
-    $pkgs, $ParsePkgInfoFn = RetrivePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation
+    $pkgs, $parsePkgInfoFn = RetrievePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation -pkgName $pkgName
     if (!$pkgs -or !$pkgs[0]) {
       return ""
     }
-    $parsedPackage = &$ParsePkgInfoFn -pkg $pkgs[0]
+    $parsedPackage = &$parsePkgInfoFn -pkg $pkgs[0]
     return $parsedPackage.ReleaseTag
   }
   catch {
@@ -414,37 +413,37 @@ function RetrieveReleaseTag($pkgRepository, $artifactLocation, $continueOnError 
     Write-Error "No release tag retrieved from $artifactLocation"
   }
 }
-function RetrivePackages($pkgRepository, $artifactLocation) {
-  $ParsePkgInfoFn = ""
+function RetrievePackages($pkgRepository, $artifactLocation, $pkgName) {
+  $parsePkgInfoFn = ""
   $packagePattern = ""
   $pkgRepository = $pkgRepository.Trim()
   switch ($pkgRepository) {
     "Maven" {
-      $ParsePkgInfoFn = "ParseMavenPackage"
+      $parsePkgInfoFn = "ParseMavenPackage"
       $packagePattern = "*.pom"
       break
     }
     "Nuget" {
-      $ParsePkgInfoFn = "ParseNugetPackage"
+      $parsePkgInfoFn = "ParseNugetPackage"
       $packagePattern = "*.nupkg"
       break
     }
     "NPM" {
-      $ParsePkgInfoFn = "ParseNPMPackage"
+      $parsePkgInfoFn = "ParseNPMPackage"
       $packagePattern = "*.tgz"
       break
     }
     "PyPI" {
-      $ParsePkgInfoFn = "ParsePyPIPackage"
+      $parsePkgInfoFn = "ParsePyPIPackage"
       $packagePattern = "*.zip"
       break
     }
     "C" {
-      $ParsePkgInfoFn = "ParseCArtifact"
+      $parsePkgInfoFn = "ParseCArtifact"
       $packagePattern = "*.json"
     }
     "CPP" {
-      $ParsePkgInfoFn = "ParseCppArtifact"
+      $parsePkgInfoFn = "ParseCppArtifact"
       $packagePattern = "*.json"
     }
     default {
@@ -452,18 +451,23 @@ function RetrivePackages($pkgRepository, $artifactLocation) {
       exit(1)
     }
   }
-  $pkgs = Get-ChildItem -Path $artifactLocation -Include $packagePattern -Recurse -File
-  return $pkgs, $ParsePkgInfoFn
+  $file_regex = if (!$pkgName) {
+    $packagePattern
+  } else {
+    "$($pkgName)$($packagePattern)"
+  }
+  $pkgs = Get-ChildItem -Path $artifactLocation -Include $file_regex -Recurse -File
+  return $pkgs, $parsePkgInfoFn
 }
 
 # Walk across all build artifacts, check them against the appropriate repository, return a list of tags/releases
 function VerifyPackages($pkgRepository, $artifactLocation, $workingDirectory, $apiUrl, $releaseSha,  $continueOnError = $false) {
   $pkgList = [array]@()
-  $pkgs, $ParsePkgInfoFn = RetrivePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation
+  $pkgs, $parsePkgInfoFn = RetrievePackages -pkgRepository $pkgRepository -artifactLocation $artifactLocation
 
   foreach ($pkg in $pkgs) {
     try {
-      $parsedPackage = &$ParsePkgInfoFn -pkg $pkg -workingDirectory $workingDirectory
+      $parsedPackage = &$parsePkgInfoFn -pkg $pkg -workingDirectory $workingDirectory
 
       if ($parsedPackage -eq $null) {
         continue
