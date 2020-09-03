@@ -101,7 +101,8 @@ function IsMavenPackageVersionPublished($pkgId, $pkgVersion, $groupId) {
 
     Write-Host "VersionCheck to maven for packageId $pkgId failed with statuscode $statusCode"
     Write-Host $statusDescription
-    exit(1)
+    #exit(1)
+    return
   }
 }
 
@@ -471,8 +472,7 @@ function VerifyPackages($pkgRepository, $artifactLocation, $workingDirectory, $a
       if ($parsedPackage.Deployable -ne $True -and !$continueOnError) {
         Write-Host "Package $($parsedPackage.PackageId) is marked with version $($parsedPackage.PackageVersion), the version $($parsedPackage.PackageVersion) has already been deployed to the target repository."
         Write-Host "Maybe a pkg version wasn't updated properly?"
-        #exit(1)
-        return
+        exit(1)
       }
 
       $pkgList += New-Object PSObject -Property @{

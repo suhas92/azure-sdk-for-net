@@ -102,19 +102,19 @@ stages:
                           Get-ChildItem -Recurse $(Pipeline.Workspace)/staging
                         workingDirectory: $(Pipeline.Workspace)
                         displayName: Output Visible Artifacts
-                      # - task: NuGetCommand@2
-                      #   displayName: 'Publish ${{artifact.name}} package to NuGet.org'
-                      #   inputs:
-                      #     command: push
-                      #     packagesToPush: '$(Pipeline.Workspace)/staging/**/*.nupkg;!$(Pipeline.Workspace)/staging/**/*.symbols.nupkg'
-                      #     nuGetFeedType: external
-                      #     publishFeedCredentials: Nuget.org
-                      # - task: NuGetCommand@2
-                      #   displayName: 'Publish to DevOps Feed'
-                      #   inputs:
-                      #     command: push
-                      #     packagesToPush: '$(Pipeline.Workspace)/staging/**/*.nupkg;!$(Pipeline.Workspace)/staging/**/*.symbols.nupkg'
-                      #     publishVstsFeed: ${{ parameters.DevOpsFeedID }}
+                      - task: NuGetCommand@2
+                        displayName: 'Publish ${{artifact.name}} package to NuGet.org'
+                        inputs:
+                          command: push
+                          packagesToPush: '$(Pipeline.Workspace)/staging/**/*.nupkg;!$(Pipeline.Workspace)/staging/**/*.symbols.nupkg'
+                          nuGetFeedType: external
+                          publishFeedCredentials: Nuget.org
+                      - task: NuGetCommand@2
+                        displayName: 'Publish to DevOps Feed'
+                        inputs:
+                          command: push
+                          packagesToPush: '$(Pipeline.Workspace)/staging/**/*.nupkg;!$(Pipeline.Workspace)/staging/**/*.symbols.nupkg'
+                          publishVstsFeed: ${{ parameters.DevOpsFeedID }}
 
           - ${{if ne(artifact.options.skipSymbolsUpload, 'true')}}:
             - deployment: UploadSymbols
@@ -122,7 +122,6 @@ stages:
               condition: and(succeeded(), ne(variables['Skip.SymbolsUpload'], 'true'))
               environment: nuget
               dependsOn: PublishPackage
-
               pool:
                 vmImage: windows-2019
 
@@ -152,7 +151,8 @@ stages:
               displayName: Publish to Docs.MS
               condition: and(succeeded(), ne(variables['Skip.PublishDocs'], 'true'))
               environment: githubio
-              dependsOn: PublishPackage
+              #dependsOn: PublishPackage
+              dependsOn: TagRepository
 
               variables:
                 CIConfigs: "{'targets':[{'path_to_config':'bundlepackages/azure-dotnet-preview.csv','Mode':'Preview'},{'path_to_config':'bundlepackages/azure-dotnet.csv','mode':'Latest'}]}"
@@ -200,7 +200,8 @@ stages:
               displayName: Publish Docs to GitHub pages
               condition: and(succeeded(), ne(variables['Skip.PublishDocs'], 'true'))
               environment: githubio
-              dependsOn: PublishPackage
+              #dependsOn: PublishPackage
+              dependsOn: TagRepository
 
               pool:
                 vmImage: windows-2019
@@ -226,6 +227,7 @@ stages:
                         displayName: Output Visible Artifacts
                       - template: /eng/common/pipelines/templates/steps/publish-blobs.yml
                         parameters:
+                          ArtifactLocation: $(Pipeline.Workspace)/${{artifact.safeName}}
                           FolderForUpload: '$(Pipeline.Workspace)/${{artifact.safeName}}'
                           BlobSASKey: '$(azure-sdk-docs-prod-sas)'
                           BlobName: '$(azure-sdk-docs-prod-blob-name)'
@@ -234,30 +236,30 @@ stages:
                           # we override the regular script path because we have cloned the build tools repo as a separate artifact.
                           ScriptPath: 'eng/common/scripts/copy-docs-to-blobstorage.ps1'
 
-          # - ${{if ne(artifact.options.skipUpdatePackageVersion, 'true')}}:
-          #   - deployment: UpdatePackageVersion
-          #     displayName: "Update Package Version"
-          #     condition: and(succeeded(), ne(variables['Skip.UpdatePackageVersion'], 'true'))
-          #     environment: github
-          #     dependsOn: PublishPackage
+          - ${{if ne(artifact.options.skipUpdatePackageVersion, 'true')}}:
+            - deployment: UpdatePackageVersion
+              displayName: "Update Package Version"
+              condition: and(succeeded(), ne(variables['Skip.UpdatePackageVersion'], 'true'))
+              environment: github
+              dependsOn: PublishPackage
 
-          #     pool:
-          #       vmImage: windows-2019
+              pool:
+                vmImage: windows-2019
 
-          #     strategy:
-          #       runOnce:
-          #         deploy:
-          #           steps:
-          #             - checkout: self
-          #             - pwsh: |
-          #                 eng/scripts/Update-PkgVersion.ps1 -ServiceDirectory '${{parameters.ServiceDirectory}}' -PackageName '${{artifact.name}}' -PackageDirName '${{artifact.directoryName}}'
-          #               displayName: Increment package version
-          #             - template: /eng/common/pipelines/templates/steps/create-pull-request.yml
-          #               parameters:
-          #                 RepoName: azure-sdk-for-net
-          #                 PRBranchName: increment-package-version-${{ parameters.ServiceDirectory }}-$(Build.BuildId)
-          #                 CommitMsg: "Increment package version after release of ${{ artifact.name }}"
-          #                 PRTitle: "Increment version for ${{ parameters.ServiceDirectory }} releases"
+              strategy:
+                runOnce:
+                  deploy:
+                    steps:
+                      - checkout: self
+                      - pwsh: |
+                          eng/scripts/Update-PkgVersion.ps1 -ServiceDirectory '${{parameters.ServiceDirectory}}' -PackageName '${{artifact.name}}' -PackageDirName '${{artifact.directoryName}}'
+                        displayName: Increment package version
+                      - template: /eng/common/pipelines/templates/steps/create-pull-request.yml
+                        parameters:
+                          RepoName: azure-sdk-for-net
+                          PRBranchName: increment-package-version-${{ parameters.ServiceDirectory }}-$(Build.BuildId)
+                          CommitMsg: "Increment package version after release of ${{ artifact.name }}"
+                          PRTitle: "Increment version for ${{ parameters.ServiceDirectory }} releases"
 
   - stage: Integration
     dependsOn: Signing
