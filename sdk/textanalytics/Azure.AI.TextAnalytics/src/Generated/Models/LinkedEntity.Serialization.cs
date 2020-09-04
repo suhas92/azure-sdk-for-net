@@ -22,7 +22,6 @@ namespace Azure.AI.TextAnalytics
             Optional<string> id = default;
             Uri url = default;
             string dataSource = default;
-            Optional<string> bingId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("name"))
@@ -60,13 +59,8 @@ namespace Azure.AI.TextAnalytics
                     dataSource = property.Value.GetString();
                     continue;
                 }
-                if (property.NameEquals("bingId"))
-                {
-                    bingId = property.Value.GetString();
-                    continue;
-                }
             }
-            return new LinkedEntity(name, matches, language, id.Value, url, dataSource, bingId.Value);
+            return new LinkedEntity(name, matches, language, id.Value, url, dataSource);
         }
     }
 }

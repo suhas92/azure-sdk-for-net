@@ -10,18 +10,16 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    internal partial class LanguageBatchInput : IUtf8JsonSerializable
+    internal partial class JobDescriptor : IUtf8JsonSerializable
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("documents");
-            writer.WriteStartArray();
-            foreach (var item in Documents)
+            if (Optional.IsDefined(DisplayName))
             {
-                writer.WriteObjectValue(item);
+                writer.WritePropertyName("displayName");
+                writer.WriteStringValue(DisplayName);
             }
-            writer.WriteEndArray();
             writer.WriteEndObject();
         }
     }
