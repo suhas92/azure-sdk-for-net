@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    internal partial class TaskState
+    public partial class TaskState
     {
         internal static TaskState DeserializeTaskState(JsonElement element)
         {

@@ -10,7 +10,7 @@ using System;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The TaskState. </summary>
-    internal partial class TaskState
+    public partial class TaskState
     {
         /// <summary> Initializes a new instance of TaskState. </summary>
         /// <param name="lastUpdateDateTime"> . </param>
@@ -29,8 +29,13 @@ namespace Azure.AI.TextAnalytics.Models
             Status = status;
         }
 
+        /// <summary> LastUpdateDateTime. </summary>
         public DateTimeOffset LastUpdateDateTime { get; }
+
+        /// <summary> Name. </summary>
         public string Name { get; }
+
+        /// <summary> Status. </summary>
         public State Status { get; }
     }
 }

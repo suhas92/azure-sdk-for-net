@@ -738,7 +738,7 @@ namespace Azure.AI.TextAnalytics
             {
                 var documents = new List<MultiLanguageInput>() { ConvertToMultiLanguageInput(document, language) };
 
-                Response<PiiEntitiesResult> result = await _serviceRestClient.EntitiesRecognitionPiiAsync(
+                Response<PiiResult> result = await _serviceRestClient.EntitiesRecognitionPiiAsync(
                     new MultiLanguageBatchInput(documents),
                     options.ModelVersion,
                     options.IncludeStatistics,
