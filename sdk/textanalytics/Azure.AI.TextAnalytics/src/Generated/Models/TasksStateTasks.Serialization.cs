@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    public partial class TasksStateTasks
+    internal partial class TasksStateTasks
     {
         internal static TasksStateTasks DeserializeTasksStateTasks(JsonElement element)
         {
@@ -22,11 +22,11 @@ namespace Azure.AI.TextAnalytics.Models
             int total = default;
             Optional<IReadOnlyList<TasksStateTasksEntityRecognitionTasksItem>> entityRecognitionTasks = default;
             Optional<IReadOnlyList<TasksStateTasksEntityRecognitionPiiTasksItem>> entityRecognitionPiiTasks = default;
-            Optional<IReadOnlyList<TasksStateTasksEntityLinkingTasksItem>> entityLinkingTasks = default;
+            Optional<IReadOnlyList<EntityLinkingTasksItem>> entityLinkingTasks = default;
             Optional<IReadOnlyList<TasksStateTasksKeyPhraseExtractionTasksItem>> keyPhraseExtractionTasks = default;
             Optional<IReadOnlyList<TasksStateTasksSentimentAnalysisTasksItem>> sentimentAnalysisTasks = default;
-            Optional<IReadOnlyList<TasksStateTasksCustomClassificationTasksItem>> customClassificationTasks = default;
-            Optional<IReadOnlyList<TasksStateTasksCustomEntityRecognitionTasksItem>> customEntityRecognitionTasks = default;
+            Optional<IReadOnlyList<CustomClassificationTasksItem>> customClassificationTasks = default;
+            Optional<IReadOnlyList<CustomEntityRecognitionTasksItem>> customEntityRecognitionTasks = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("details"))
@@ -81,10 +81,10 @@ namespace Azure.AI.TextAnalytics.Models
                 }
                 if (property.NameEquals("entityLinkingTasks"))
                 {
-                    List<TasksStateTasksEntityLinkingTasksItem> array = new List<TasksStateTasksEntityLinkingTasksItem>();
+                    List<EntityLinkingTasksItem> array = new List<EntityLinkingTasksItem>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(TasksStateTasksEntityLinkingTasksItem.DeserializeTasksStateTasksEntityLinkingTasksItem(item));
+                        array.Add(EntityLinkingTasksItem.DeserializeEntityLinkingTasksItem(item));
                     }
                     entityLinkingTasks = array;
                     continue;
@@ -111,20 +111,20 @@ namespace Azure.AI.TextAnalytics.Models
                 }
                 if (property.NameEquals("customClassificationTasks"))
                 {
-                    List<TasksStateTasksCustomClassificationTasksItem> array = new List<TasksStateTasksCustomClassificationTasksItem>();
+                    List<CustomClassificationTasksItem> array = new List<CustomClassificationTasksItem>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(TasksStateTasksCustomClassificationTasksItem.DeserializeTasksStateTasksCustomClassificationTasksItem(item));
+                        array.Add(CustomClassificationTasksItem.DeserializeCustomClassificationTasksItem(item));
                     }
                     customClassificationTasks = array;
                     continue;
                 }
                 if (property.NameEquals("customEntityRecognitionTasks"))
                 {
-                    List<TasksStateTasksCustomEntityRecognitionTasksItem> array = new List<TasksStateTasksCustomEntityRecognitionTasksItem>();
+                    List<CustomEntityRecognitionTasksItem> array = new List<CustomEntityRecognitionTasksItem>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(TasksStateTasksCustomEntityRecognitionTasksItem.DeserializeTasksStateTasksCustomEntityRecognitionTasksItem(item));
+                        array.Add(CustomEntityRecognitionTasksItem.DeserializeCustomEntityRecognitionTasksItem(item));
                     }
                     customEntityRecognitionTasks = array;
                     continue;

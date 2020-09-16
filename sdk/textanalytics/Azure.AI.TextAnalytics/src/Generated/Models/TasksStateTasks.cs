@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The TasksStateTasks. </summary>
-    public partial class TasksStateTasks
+    internal partial class TasksStateTasks
     {
         /// <summary> Initializes a new instance of TasksStateTasks. </summary>
         /// <param name="completed"> . </param>
@@ -27,11 +27,11 @@ namespace Azure.AI.TextAnalytics.Models
             Total = total;
             EntityRecognitionTasks = new ChangeTrackingList<TasksStateTasksEntityRecognitionTasksItem>();
             EntityRecognitionPiiTasks = new ChangeTrackingList<TasksStateTasksEntityRecognitionPiiTasksItem>();
-            EntityLinkingTasks = new ChangeTrackingList<TasksStateTasksEntityLinkingTasksItem>();
+            EntityLinkingTasks = new ChangeTrackingList<EntityLinkingTasksItem>();
             KeyPhraseExtractionTasks = new ChangeTrackingList<TasksStateTasksKeyPhraseExtractionTasksItem>();
             SentimentAnalysisTasks = new ChangeTrackingList<TasksStateTasksSentimentAnalysisTasksItem>();
-            CustomClassificationTasks = new ChangeTrackingList<TasksStateTasksCustomClassificationTasksItem>();
-            CustomEntityRecognitionTasks = new ChangeTrackingList<TasksStateTasksCustomEntityRecognitionTasksItem>();
+            CustomClassificationTasks = new ChangeTrackingList<CustomClassificationTasksItem>();
+            CustomEntityRecognitionTasks = new ChangeTrackingList<CustomEntityRecognitionTasksItem>();
         }
 
         /// <summary> Initializes a new instance of TasksStateTasks. </summary>
@@ -47,7 +47,7 @@ namespace Azure.AI.TextAnalytics.Models
         /// <param name="sentimentAnalysisTasks"> . </param>
         /// <param name="customClassificationTasks"> . </param>
         /// <param name="customEntityRecognitionTasks"> . </param>
-        internal TasksStateTasks(IReadOnlyList<TaskState> details, int completed, int failed, int inProgress, int total, IReadOnlyList<TasksStateTasksEntityRecognitionTasksItem> entityRecognitionTasks, IReadOnlyList<TasksStateTasksEntityRecognitionPiiTasksItem> entityRecognitionPiiTasks, IReadOnlyList<TasksStateTasksEntityLinkingTasksItem> entityLinkingTasks, IReadOnlyList<TasksStateTasksKeyPhraseExtractionTasksItem> keyPhraseExtractionTasks, IReadOnlyList<TasksStateTasksSentimentAnalysisTasksItem> sentimentAnalysisTasks, IReadOnlyList<TasksStateTasksCustomClassificationTasksItem> customClassificationTasks, IReadOnlyList<TasksStateTasksCustomEntityRecognitionTasksItem> customEntityRecognitionTasks)
+        internal TasksStateTasks(IReadOnlyList<TaskState> details, int completed, int failed, int inProgress, int total, IReadOnlyList<TasksStateTasksEntityRecognitionTasksItem> entityRecognitionTasks, IReadOnlyList<TasksStateTasksEntityRecognitionPiiTasksItem> entityRecognitionPiiTasks, IReadOnlyList<EntityLinkingTasksItem> entityLinkingTasks, IReadOnlyList<TasksStateTasksKeyPhraseExtractionTasksItem> keyPhraseExtractionTasks, IReadOnlyList<TasksStateTasksSentimentAnalysisTasksItem> sentimentAnalysisTasks, IReadOnlyList<CustomClassificationTasksItem> customClassificationTasks, IReadOnlyList<CustomEntityRecognitionTasksItem> customEntityRecognitionTasks)
         {
             Details = details;
             Completed = completed;
@@ -62,18 +62,5 @@ namespace Azure.AI.TextAnalytics.Models
             CustomClassificationTasks = customClassificationTasks;
             CustomEntityRecognitionTasks = customEntityRecognitionTasks;
         }
-
-        public IReadOnlyList<TaskState> Details { get; }
-        public int Completed { get; }
-        public int Failed { get; }
-        public int InProgress { get; }
-        public int Total { get; }
-        public IReadOnlyList<TasksStateTasksEntityRecognitionTasksItem> EntityRecognitionTasks { get; }
-        public IReadOnlyList<TasksStateTasksEntityRecognitionPiiTasksItem> EntityRecognitionPiiTasks { get; }
-        public IReadOnlyList<TasksStateTasksEntityLinkingTasksItem> EntityLinkingTasks { get; }
-        public IReadOnlyList<TasksStateTasksKeyPhraseExtractionTasksItem> KeyPhraseExtractionTasks { get; }
-        public IReadOnlyList<TasksStateTasksSentimentAnalysisTasksItem> SentimentAnalysisTasks { get; }
-        public IReadOnlyList<TasksStateTasksCustomClassificationTasksItem> CustomClassificationTasks { get; }
-        public IReadOnlyList<TasksStateTasksCustomEntityRecognitionTasksItem> CustomEntityRecognitionTasks { get; }
     }
 }

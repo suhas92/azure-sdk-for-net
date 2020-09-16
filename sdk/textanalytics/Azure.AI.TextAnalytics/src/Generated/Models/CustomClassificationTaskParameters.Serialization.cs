@@ -10,7 +10,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    public partial class CustomClassificationTaskParameters : IUtf8JsonSerializable
+    internal partial class CustomClassificationTaskParameters : IUtf8JsonSerializable
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {

@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    public partial class TasksStateTasksKeyPhraseExtractionTasksItem
+    internal partial class TasksStateTasksKeyPhraseExtractionTasksItem
     {
         internal static TasksStateTasksKeyPhraseExtractionTasksItem DeserializeTasksStateTasksKeyPhraseExtractionTasksItem(JsonElement element)
         {

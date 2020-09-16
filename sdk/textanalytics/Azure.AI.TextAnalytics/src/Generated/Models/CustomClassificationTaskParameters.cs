@@ -10,7 +10,7 @@ using System;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The CustomClassificationTaskParameters. </summary>
-    public partial class CustomClassificationTaskParameters
+    internal partial class CustomClassificationTaskParameters
     {
         /// <summary> Initializes a new instance of CustomClassificationTaskParameters. </summary>
         /// <param name="appId"> . </param>
@@ -30,8 +30,5 @@ namespace Azure.AI.TextAnalytics.Models
             AppId = appId;
             SlotName = slotName;
         }
-
-        public string AppId { get; }
-        public string SlotName { get; }
     }
 }

@@ -8,14 +8,11 @@
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The EntityLinkingTaskParameters. </summary>
-    public partial class EntityLinkingTaskParameters
+    internal partial class EntityLinkingTaskParameters
     {
         /// <summary> Initializes a new instance of EntityLinkingTaskParameters. </summary>
         public EntityLinkingTaskParameters()
         {
         }
-
-        public string ModelVersion { get; set; }
-        public StringIndexType? StringIndexType { get; set; }
     }
 }

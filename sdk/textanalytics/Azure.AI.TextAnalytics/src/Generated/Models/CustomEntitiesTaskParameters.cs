@@ -10,7 +10,7 @@ using System;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The CustomEntitiesTaskParameters. </summary>
-    public partial class CustomEntitiesTaskParameters
+    internal partial class CustomEntitiesTaskParameters
     {
         /// <summary> Initializes a new instance of CustomEntitiesTaskParameters. </summary>
         /// <param name="appId"> . </param>
@@ -30,9 +30,5 @@ namespace Azure.AI.TextAnalytics.Models
             AppId = appId;
             SlotName = slotName;
         }
-
-        public string AppId { get; }
-        public string SlotName { get; }
-        public StringIndexType? StringIndexType { get; set; }
     }
 }

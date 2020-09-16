@@ -13,7 +13,7 @@ using Azure.AI.TextAnalytics;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The DocumentPiiEntities. </summary>
-    internal partial class DocumentPiiEntities
+    public partial class DocumentPiiEntities
     {
         /// <summary> Initializes a new instance of DocumentPiiEntities. </summary>
         /// <param name="id"> Unique, non-empty document identifier. </param>
@@ -55,10 +55,6 @@ namespace Azure.AI.TextAnalytics.Models
 
         /// <summary> Unique, non-empty document identifier. </summary>
         public string Id { get; }
-        /// <summary> Recognized entities in the document. </summary>
-        public IReadOnlyList<PiiEntity> Entities { get; }
-        /// <summary> Warnings encountered while processing document. </summary>
-        public IReadOnlyList<TextAnalyticsWarningInternal> Warnings { get; }
         /// <summary> if showStats=true was specified in the request this field will contain information about the document payload. </summary>
         public TextDocumentStatistics? Statistics { get; }
     }

@@ -7,7 +7,7 @@ Run `dotnet msbuild /t:GenerateCode` to generate code.
 
 ``` yaml
 input-file:
-    -  $(this-folder)/swagger.json
+    -  $(this-folder)/swagger-latest.json
 ```
 
 ### Make generated models internal by default

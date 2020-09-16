@@ -13,47 +13,5 @@ namespace Azure.AI.TextAnalytics
     /// <summary> The LinkedEntity. </summary>
     public readonly partial struct LinkedEntity
     {
-        /// <summary> Initializes a new instance of LinkedEntity. </summary>
-        /// <param name="name"> Entity Linking formal name. </param>
-        /// <param name="matches"> List of instances this entity appears in the text. </param>
-        /// <param name="language"> Language used in the data source. </param>
-        /// <param name="dataSourceEntityId"> Unique identifier of the recognized entity from the data source. </param>
-        /// <param name="url"> URL for the entity&apos;s page from the data source. </param>
-        /// <param name="dataSource"> Data source used to extract entity linking, such as Wiki/Bing etc. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/>, <paramref name="matches"/>, <paramref name="language"/>, <paramref name="dataSourceEntityId"/>, <paramref name="url"/>, or <paramref name="dataSource"/> is null. </exception>
-        internal LinkedEntity(string name, IEnumerable<LinkedEntityMatch> matches, string language, string dataSourceEntityId, Uri url, string dataSource)
-        {
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-            if (matches == null)
-            {
-                throw new ArgumentNullException(nameof(matches));
-            }
-            if (language == null)
-            {
-                throw new ArgumentNullException(nameof(language));
-            }
-            if (dataSourceEntityId == null)
-            {
-                throw new ArgumentNullException(nameof(dataSourceEntityId));
-            }
-            if (url == null)
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
-            if (dataSource == null)
-            {
-                throw new ArgumentNullException(nameof(dataSource));
-            }
-
-            Name = name;
-            Matches = matches;
-            Language = language;
-            DataSourceEntityId = dataSourceEntityId;
-            Url = url;
-            DataSource = dataSource;
-        }
     }
 }

@@ -8,7 +8,9 @@
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The State. </summary>
+#pragma warning disable AZC0012 // Avoid single word type names
     public enum State
+#pragma warning restore AZC0012 // Avoid single word type names
     {
         /// <summary> notstarted. </summary>
         Notstarted,

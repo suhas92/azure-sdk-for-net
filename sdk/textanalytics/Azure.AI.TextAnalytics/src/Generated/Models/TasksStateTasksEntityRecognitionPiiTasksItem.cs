@@ -10,7 +10,7 @@ using System;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The TasksStateTasksEntityRecognitionPiiTasksItem. </summary>
-    public partial class TasksStateTasksEntityRecognitionPiiTasksItem : TaskState
+    internal partial class TasksStateTasksEntityRecognitionPiiTasksItem : TaskState
     {
         /// <summary> Initializes a new instance of TasksStateTasksEntityRecognitionPiiTasksItem. </summary>
         /// <param name="lastUpdateDateTime"> . </param>

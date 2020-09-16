@@ -13,7 +13,7 @@ using Azure.AI.TextAnalytics;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The CustomEntitiesResult. </summary>
-    public partial class CustomEntitiesResult
+    internal partial class CustomEntitiesResult
     {
         /// <summary> Initializes a new instance of CustomEntitiesResult. </summary>
         /// <param name="documents"> Response by document. </param>
