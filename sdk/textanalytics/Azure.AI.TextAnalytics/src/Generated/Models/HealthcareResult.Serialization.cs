@@ -12,7 +12,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    internal partial class HealthcareResult
+    public partial class HealthcareResult
     {
         internal static HealthcareResult DeserializeHealthcareResult(JsonElement element)
         {

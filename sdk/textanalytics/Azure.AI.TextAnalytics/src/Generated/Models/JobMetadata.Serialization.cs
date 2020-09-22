@@ -50,7 +50,7 @@ namespace Azure.AI.TextAnalytics.Models
                 }
                 if (property.NameEquals("status"))
                 {
-                    status = property.Value.GetString().ToState();
+                    status = new State(property.Value.GetString());
                     continue;
                 }
             }

@@ -7,7 +7,7 @@ using Azure.Core;
 namespace Azure.AI.TextAnalytics.Models
 {
     [CodeGenModel("JobManifestTasks")]
-    public partial class JobManifestTasks
+    internal partial class JobManifestTasks
     {
         internal IList<EntitiesTask> EntityRecognitionTasks { get; }
         internal IList<PiiTask> EntityRecognitionPiiTasks { get; }

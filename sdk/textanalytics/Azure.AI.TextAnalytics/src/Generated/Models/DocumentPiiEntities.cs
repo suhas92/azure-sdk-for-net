@@ -13,7 +13,7 @@ using Azure.AI.TextAnalytics;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The DocumentPiiEntities. </summary>
-    public partial class DocumentPiiEntities
+    internal partial class DocumentPiiEntities
     {
         /// <summary> Initializes a new instance of DocumentPiiEntities. </summary>
         /// <param name="id"> Unique, non-empty document identifier. </param>

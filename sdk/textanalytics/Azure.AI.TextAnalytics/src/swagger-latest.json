@@ -152,7 +152,7 @@
         "deprecated": false
       }
     },
-    "/entities/healthcare/jobs/{jobId}": {
+    "/entities/health/jobs/{jobId}": {
       "get": {
         "produces": [
           "application/json",
@@ -261,7 +261,7 @@
         "x-ms-long-running-operation": true
       }
     },
-    "/entities/healthcare/jobs": {
+    "/entities/health/jobs": {
       "post": {
         "summary": "Submit healthcare analysis job",
         "description": "Start a healthcare analysis job to recognize healthcare related entities (drugs, conditions, symptoms, etc) and their relations.",

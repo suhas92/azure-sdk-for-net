@@ -7,7 +7,7 @@ using Azure.Core;
 namespace Azure.AI.TextAnalytics.Models
 {
     [CodeGenModel("DocumentPiiEntities")]
-    public partial class DocumentPiiEntities {
+    internal partial class DocumentPiiEntities {
 
         /// <summary> Redacted text in the document. </summary>
         public string RedactedText { get; }

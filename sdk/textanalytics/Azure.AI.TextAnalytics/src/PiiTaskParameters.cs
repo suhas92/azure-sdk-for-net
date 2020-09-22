@@ -10,6 +10,5 @@ namespace Azure.AI.TextAnalytics.Models
     {
         internal string ModelVersion { get; set; }
         internal StringIndexType? StringIndexType { get; set; }
-
     }
 }

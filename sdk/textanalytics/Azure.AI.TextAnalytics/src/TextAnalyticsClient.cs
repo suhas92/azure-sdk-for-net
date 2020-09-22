@@ -19,8 +19,8 @@ namespace Azure.AI.TextAnalytics
     public partial class TextAnalyticsClient
     {
         private readonly Uri _baseUri;
-        private readonly ServiceRestClient _serviceRestClient;
-        private readonly ClientDiagnostics _clientDiagnostics;
+        internal readonly ServiceRestClient _serviceRestClient;
+        internal readonly ClientDiagnostics _clientDiagnostics;
         private readonly string _apiVersion;
         private readonly TextAnalyticsClientOptions _options;
         private readonly string DefaultCognitiveScope = "https://cognitiveservices.azure.com/.default";
@@ -2066,6 +2066,76 @@ namespace Azure.AI.TextAnalytics
                 IDictionary<string, int> map = CreateIdToIndexMap(batchInput.Documents);
                 RecognizeLinkedEntitiesResultCollection results = Transforms.ConvertToRecognizeLinkedEntitiesResultCollection(result.Value, map);
                 return Response.FromValue(results, response);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Health Async
+
+        /// <summary>
+        /// Recognizes health entities async.
+        /// </summary>
+        /// <param name="documents"></param>
+        /// <param name="options"></param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <returns>A <see cref="AnalyzeHealthOperation"/> to wait on this long-running operation.  Its <see cref="AnalyzeHealthOperation.Value"/> upon successful
+        /// completion will contain layout elements extracted from the form.</returns>
+        public virtual AnalyzeHealthOperation StartAnalyzeHealth(IEnumerable<TextDocumentInput> documents, TextAnalyticsRequestOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(documents, nameof(documents));
+
+            options ??= new TextAnalyticsRequestOptions();
+
+            MultiLanguageBatchInput documentInputs = ConvertToMultiLanguageInputs(documents);
+
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(TextAnalyticsClient)}.{nameof(StartAnalyzeHealth)}");
+            scope.Start();
+
+            try
+            {
+                ResponseWithHeaders<ServiceHealthHeaders> response = _serviceRestClient.Health(documentInputs, options.ModelVersion, _stringCodeUnit, cancellationToken);
+                string location = response.Headers.OperationLocation;
+
+                return new AnalyzeHealthOperation(_serviceRestClient, _clientDiagnostics, location);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Recognizes layout elements from one or more passed-in forms.
+        /// </summary>
+        /// <param name="documents"></param>
+        /// <param name="options"></param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <returns>A <see cref="AnalyzeHealthOperation"/> to wait on this long-running operation.  Its <see cref="AnalyzeHealthOperation.Value"/> upon successful
+        /// completion will contain layout elements extracted from the form.</returns>
+        public virtual async Task<AnalyzeHealthOperation> StartAnalyzeHealthAsync(IEnumerable<TextDocumentInput> documents, TextAnalyticsRequestOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(documents, nameof(documents));
+
+            options ??= new TextAnalyticsRequestOptions();
+
+            MultiLanguageBatchInput documentInputs = ConvertToMultiLanguageInputs(documents);
+
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(TextAnalyticsClient)}.{nameof(StartAnalyzeHealth)}");
+            scope.Start();
+
+            try
+            {
+                ResponseWithHeaders<ServiceHealthHeaders> response = await _serviceRestClient.HealthAsync(documentInputs, options.ModelVersion, _stringCodeUnit, cancellationToken).ConfigureAwait(false);
+                string location = response.Headers.OperationLocation;
+
+                return new AnalyzeHealthOperation(_serviceRestClient, _clientDiagnostics, location);
             }
             catch (Exception e)
             {

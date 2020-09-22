@@ -177,7 +177,7 @@ namespace Azure.AI.TextAnalytics
             var uri = new RawRequestUriBuilder();
             uri.AppendRaw(endpoint, false);
             uri.AppendRaw("/text/analytics/v3.2-preview.1", false);
-            uri.AppendPath("/entities/healthcare/jobs/", false);
+            uri.AppendPath("/entities/health/jobs/", false);
             uri.AppendPath(jobId, true);
             if (top != null)
             {
@@ -252,7 +252,7 @@ namespace Azure.AI.TextAnalytics
             var uri = new RawRequestUriBuilder();
             uri.AppendRaw(endpoint, false);
             uri.AppendRaw("/text/analytics/v3.2-preview.1", false);
-            uri.AppendPath("/entities/healthcare/jobs/", false);
+            uri.AppendPath("/entities/health/jobs/", false);
             uri.AppendPath(jobId, true);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json, text/json");
@@ -301,7 +301,7 @@ namespace Azure.AI.TextAnalytics
             var uri = new RawRequestUriBuilder();
             uri.AppendRaw(endpoint, false);
             uri.AppendRaw("/text/analytics/v3.2-preview.1", false);
-            uri.AppendPath("/entities/healthcare/jobs", false);
+            uri.AppendPath("/entities/health/jobs", false);
             if (modelVersion != null)
             {
                 uri.AppendQuery("model-version", modelVersion, true);

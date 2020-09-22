@@ -13,7 +13,7 @@ using Azure.AI.TextAnalytics;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The HealthcareResult. </summary>
-    internal partial class HealthcareResult
+    public partial class HealthcareResult
     {
         /// <summary> Initializes a new instance of HealthcareResult. </summary>
         /// <param name="documents"> Response by document. </param>
@@ -52,11 +52,6 @@ namespace Azure.AI.TextAnalytics.Models
             Statistics = statistics;
             ModelVersion = modelVersion;
         }
-
-        /// <summary> Response by document. </summary>
-        public IReadOnlyList<DocumentHealthcareEntities> Documents { get; }
-        /// <summary> Errors by document id. </summary>
-        public IReadOnlyList<DocumentError> Errors { get; }
         /// <summary> if showStats=true was specified in the request this field will contain information about the request payload. </summary>
         public TextDocumentBatchStatistics Statistics { get; }
         /// <summary> This field indicates which model is used for scoring. </summary>
