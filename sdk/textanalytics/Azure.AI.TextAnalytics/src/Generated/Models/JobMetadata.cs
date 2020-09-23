@@ -10,7 +10,7 @@ using System;
 namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The JobMetadata. </summary>
-    internal partial class JobMetadata
+    public partial class JobMetadata
     {
         /// <summary> Initializes a new instance of JobMetadata. </summary>
         /// <param name="createdDateTime"> . </param>
@@ -41,12 +41,5 @@ namespace Azure.AI.TextAnalytics.Models
             LastUpdateDateTime = lastUpdateDateTime;
             Status = status;
         }
-
-        public DateTimeOffset CreatedDateTime { get; }
-        public string DisplayName { get; }
-        public DateTimeOffset? ExpirationDateTime { get; }
-        public Guid JobId { get; }
-        public DateTimeOffset LastUpdateDateTime { get; }
-        public State Status { get; }
     }
 }

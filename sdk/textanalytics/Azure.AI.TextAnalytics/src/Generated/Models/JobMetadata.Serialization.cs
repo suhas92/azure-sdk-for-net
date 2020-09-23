@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.TextAnalytics.Models
 {
-    internal partial class JobMetadata
+    public partial class JobMetadata
     {
         internal static JobMetadata DeserializeJobMetadata(JsonElement element)
         {

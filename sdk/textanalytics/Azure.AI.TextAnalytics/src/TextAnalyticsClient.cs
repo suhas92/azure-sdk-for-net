@@ -2076,6 +2076,78 @@ namespace Azure.AI.TextAnalytics
 
         #endregion
 
+        #region Analyze Operation
+
+        /// <summary>
+        /// Recognizes Analyze Operation async.
+        /// </summary>
+        /// <param name="documents"></param>
+        /// <param name="options"></param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <returns>A <see cref="AnalyzeOperation"/> to wait on this long-running operation.  Its <see cref="AnalyzeOperation.Value"/> upon successful
+        /// completion will contain layout elements extracted from the form.</returns>
+        public virtual AnalyzeOperation StartAnalyzeOperation(IEnumerable<TextDocumentInput> documents, TextAnalyticsRequestOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(documents, nameof(documents));
+
+            options ??= new TextAnalyticsRequestOptions();
+
+            MultiLanguageBatchInput documentInputs = ConvertToMultiLanguageInputs(documents);
+
+            AnalyzeBatchInput analyzeDocumentInputs = new AnalyzeBatchInput(documentInputs, new JobManifestTasks());
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(TextAnalyticsClient)}.{nameof(StartAnalyzeHealth)}");
+            scope.Start();
+
+            try
+            {
+                ResponseWithHeaders<ServiceAnalyzeHeaders> response = _serviceRestClient.Analyze(analyzeDocumentInputs, cancellationToken);
+                string location = response.Headers.OperationLocation;
+
+                return new AnalyzeOperation(_serviceRestClient, _clientDiagnostics, location);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Recognizes layout elements from one or more passed-in forms.
+        /// </summary>
+        /// <param name="documents"></param>
+        /// <param name="options"></param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <returns>A <see cref="AnalyzeOperation"/> to wait on this long-running operation.  Its <see cref="AnalyzeOperation.Value"/> upon successful
+        /// completion will contain layout elements extracted from the form.</returns>
+        public virtual async Task<AnalyzeOperation> StartAnalyzeOperationAsync(IEnumerable<TextDocumentInput> documents, TextAnalyticsRequestOptions options, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNull(documents, nameof(documents));
+
+            options ??= new TextAnalyticsRequestOptions();
+
+            MultiLanguageBatchInput documentInputs = ConvertToMultiLanguageInputs(documents);
+            AnalyzeBatchInput analyzeDocumentInputs = new AnalyzeBatchInput(documentInputs, new JobManifestTasks());
+
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(TextAnalyticsClient)}.{nameof(StartAnalyzeHealth)}");
+            scope.Start();
+
+            try
+            {
+                ResponseWithHeaders<ServiceAnalyzeHeaders> response = await _serviceRestClient.AnalyzeAsync(analyzeDocumentInputs, cancellationToken).ConfigureAwait(false);
+                string location = response.Headers.OperationLocation;
+
+                return new AnalyzeOperation(_serviceRestClient, _clientDiagnostics, location);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        #endregion
+
         #region Health Async
 
         /// <summary>
