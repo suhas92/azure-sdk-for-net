@@ -48,7 +48,7 @@ namespace Azure.AI.TextAnalytics.Samples
             Environment.SetEnvironmentVariable("CLIENT_SECRET", "");
 
             string endpoint = "https://cognitiveusw2dev.azure-api.net/";
-            string apiKey = "37d5e1bee95c40c4b38b24d165051dac";
+            string apiKey = "..";
 
             #region Snippet:TextAnalyticsSample2CreateClient
             var client = new TextAnalyticsClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
